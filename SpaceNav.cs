@@ -20,6 +20,7 @@ namespace SpaceNavWrapper
 
 		private double _sensitivity = 1.0;
 		private int _threshold = 5;
+        private bool _nonblocking;
 		private bool isDisposed;
 
 		#region Structures
@@ -54,6 +55,8 @@ namespace SpaceNavWrapper
 		private static extern int spnav_open(ushort vendor_id, ushort product_id);
 		[DllImport(DLL_NAME)]
 		private static extern int spnav_close();
+        [DllImport(DLL_NAME)]
+        private static extern int spnav_set_nonblocking(bool nonblock);
 		[DllImport(DLL_NAME)]
 		private static extern int spnav_wait_event(ref SpNavEvent ev);
 		[DllImport(DLL_NAME)]
@@ -97,26 +100,44 @@ namespace SpaceNavWrapper
 					break;
 			}
 		}
+        
+        private void CloseDevice()
+        {
+            // TODO : handle retcode and errors
+            spnav_close();
+        }
 
-		public double Sensitivity
-		{
-			get => _sensitivity;
-			set
-			{
-				_sensitivity = value;
-				spnav_sensitivity(value);
-			}
-		}
+		#region Properties
+        public double Sensitivity
+        {
+            get => _sensitivity;
+            set
+            {
+                _sensitivity = value;
+                spnav_sensitivity(value);
+            }
+        }
 
-		public int Threshold
-		{
-			get => _threshold;
-			set
-			{
-				_threshold = value;
-				spnav_deadzone(value);
-			}
-		}
+        public int Threshold
+        {
+            get => _threshold;
+            set
+            {
+                _threshold = value;
+                spnav_deadzone(value);
+            }
+        }
+        
+        public bool Nonblocking
+        {
+			get => _nonblocking;
+            set
+            {
+				_nonblocking = value;
+				spnav_set_nonblocking(value);
+            }
+        }
+		#endregion
 
 		public void Dispose()
 		{
@@ -127,12 +148,6 @@ namespace SpaceNavWrapper
 				Motion = null;
 			}
 			isDisposed = true;
-		}
-
-		private void CloseDevice()
-		{
-			// TODO : handle retcode and errors
-			spnav_close();
 		}
 	}
 }

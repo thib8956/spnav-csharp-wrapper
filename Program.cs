@@ -16,7 +16,10 @@ namespace SpaceNavWrapper
 			//}
 			SpaceNav navDriver = new SpaceNav();
 			navDriver.InitDevice();
-			navDriver.Button += OnButton;
+			navDriver.Button += delegate (object sender, ButtonEventArgs e)
+			{
+				navDriver.Nonblocking = !navDriver.Nonblocking;
+			};
 			navDriver.Motion += OnMotion;
             
             Console.CancelKeyPress += delegate {
@@ -25,15 +28,11 @@ namespace SpaceNavWrapper
 			for (; ; ) 
             {
                 navDriver.WaitEvent();
+				Console.WriteLine("AA");
             }
 		}
 
 		private static void OnMotion(object sender, MotionEventArgs e)
-		{
-			Console.WriteLine(e);
-		}
-
-		private static void OnButton(object sender, EventArgs e)
 		{
 			Console.WriteLine(e);
 		}

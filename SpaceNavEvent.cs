@@ -1,49 +1,37 @@
-﻿namespace spnavwrapper
+﻿using System;
+
+namespace SpaceNavWrapper
 {
-    public abstract class SpaceNavEvent
+    public class MotionEventArgs : EventArgs 
     {
-    }
-
-    public class SpaceNavButtonEvent : SpaceNavEvent
-    {
-        public bool Pressed { get; }
-        public int Button { get; }
-
-        public SpaceNavButtonEvent(bool pressed, int button)
-        {
-            Pressed = pressed;
-            Button = button;
-        }
-
-        public override string ToString()
-        {
-            return "pressed=" + Pressed + " button=" + Button;
-        }
-    }
-
-    public class SpaceNavMotionEvent : SpaceNavEvent
-    {
-        public int X { get; }
-        public int Y { get; }
-        public int Z { get; }
-        public int Rx { get; }
-        public int Ry { get; }
-        public int Rz { get; }
-
-        public SpaceNavMotionEvent(int x, int y, int z, int rx, int ry, int rz)
-        {
-            X = x;
-            Y = y;
-            Z = z;
-            Rx = rx;
-            Ry = ry;
-            Rz = rz;
-        }
-
+        public readonly int X, Y, Z;
+        public readonly int Rx, Ry, Rz;
+        
+        public MotionEventArgs(int x, int y, int z, int rx, int ry, int rz)
+		{
+			X = x;
+			Y = y;
+			Z = z;
+			Rx = rx;
+			Ry = ry;
+			Rz = rz;
+		}
+        
         public override string ToString()
         {
             return "x=" + X + " y=" + Y + " z=" + Z +
                 " rx=" + Rz + " ry=" + Ry + " rz=" + Rz;
         }
+    }
+
+	public class ButtonEventArgs : EventArgs
+    {
+		public readonly int button;
+		public readonly bool pressed;
+        
+        public override string ToString()
+		{
+			return string.Format("[ButtonEventArgs: button={0}, pressed={1}]", button, pressed);
+		}
     }
 }

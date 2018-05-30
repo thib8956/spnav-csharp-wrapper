@@ -5,19 +5,21 @@ namespace spnavwrapper
 {
 	public sealed class SpaceNav : IDisposable
 	{
-		double _sensitivity = 1.0;
-		int _threshold = 5;
-
-		static SpaceNav instance;
-
-		const int SPNAV_EVENT_MOTION = 1;
-		const int SPNAV_EVENT_BUTTON = 2;
-		const ushort SPNAV_VENDOR_ID = 0x046d;
-		const ushort SPNAV_PRODUCT_ID = 0x0c627;
-
 		const string DLL_NAME = "spnavhdi";
 
-		struct SpNavEventMotion
+		#region Constants
+		private const int SPNAV_EVENT_MOTION = 1;
+		private const int SPNAV_EVENT_BUTTON = 2;
+		private const ushort SPNAV_VENDOR_ID = 0x046d;
+		private const ushort SPNAV_PRODUCT_ID = 0x0c627;
+		#endregion
+
+		private double _sensitivity = 1.0;
+		private int _threshold = 5;
+		private static SpaceNav instance;
+
+		#region Structures
+		private struct SpNavEventMotion
 		{
 			public int type;
 			public int x, y, z;
@@ -26,7 +28,7 @@ namespace spnavwrapper
 			public IntPtr data;
 		}
 
-		struct SpNavEventButton
+		private struct SpNavEventButton
 		{
 			public int type;
 			public int press;
@@ -34,32 +36,63 @@ namespace spnavwrapper
 		}
 
 		[StructLayout(LayoutKind.Explicit)]
-		struct SpNavEvent
+		private struct SpNavEvent
 		{
 			[FieldOffset(0)] public int type;
 			[FieldOffset(0)] public SpNavEventMotion motion;
 			[FieldOffset(0)] public SpNavEventButton button;
 		}
+		#endregion
 
+		#region DLL Imports
 		[DllImport(DLL_NAME)]
-		static extern int spnav_open(ushort vendor_id, ushort product_id);
+		private static extern int spnav_open(ushort vendor_id, ushort product_id);
 		[DllImport(DLL_NAME)]
-		static extern int spnav_close();
+		private static extern int spnav_close();
 		[DllImport(DLL_NAME)]
-		static extern int spnav_wait_event(ref SpNavEvent ev);
+		private static extern int spnav_wait_event(ref SpNavEvent ev);
 		[DllImport(DLL_NAME)]
-		static extern int spnav_wait_event_timeout(ref SpNavEvent ev, int timeout);
+		private static extern int spnav_wait_event_timeout(ref SpNavEvent ev, int timeout);
 		[DllImport(DLL_NAME)]
-		static extern int spnav_sensitivity(double sens);
+		private static extern int spnav_sensitivity(double sens);
 		[DllImport(DLL_NAME)]
-		static extern int spnav_deadzone(int threshold);
+		private static extern int spnav_deadzone(int threshold);
+		#endregion
 
-		SpaceNav()
+		private SpaceNav()
 		{
 			// TODO : handle retcode
 			spnav_open(SPNAV_VENDOR_ID, SPNAV_PRODUCT_ID);
 		}
 
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		private void Dispose(bool disposing)
+		{
+			if (!disposedValue)
+			{
+				// Free unmanaged resources
+				spnav_close();
+				disposedValue = true;
+			}
+		}
+
+		~SpaceNav()
+		{
+			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+			Dispose(false);
+		}
+
+		// This code added to correctly implement the disposable pattern.
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+		#endregion
+
+		#region Methods
 		public static SpaceNav Instance
 		{
 			get
@@ -137,32 +170,6 @@ namespace spnavwrapper
 				spnav_deadzone(value);
 				_threshold = value;
 			}
-		}
-
-		#region IDisposable Support
-		private bool disposedValue = false; // To detect redundant calls
-
-		void Dispose(bool disposing)
-		{
-			if (!disposedValue)
-			{
-				// Free unmanaged resources
-				spnav_close();
-				disposedValue = true;
-			}
-		}
-
-		~SpaceNav()
-		{
-			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-			Dispose(false);
-		}
-
-		// This code added to correctly implement the disposable pattern.
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
 		}
 		#endregion
 	}

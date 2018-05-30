@@ -14,7 +14,7 @@ namespace SpaceNavWrapper
 			//	var ev = spnavwrapper.SpaceNav.Instance.WaitEvent(100);
 			//	Console.WriteLine(ev);
 			//}
-			SpaceNavDriver navDriver = new SpaceNavDriver();
+			SpaceNav navDriver = new SpaceNav();
 			navDriver.InitDevice();
 			navDriver.Button += OnButton;
 			navDriver.Motion += OnMotion;
@@ -22,10 +22,10 @@ namespace SpaceNavWrapper
             Console.CancelKeyPress += delegate {
 				navDriver.Dispose();
             };
-
-			for (; ; )
-			{
-			}
+			for (; ; ) 
+            {
+                navDriver.WaitEvent();
+            }
 		}
 
 		private static void OnMotion(object sender, MotionEventArgs e)
@@ -35,7 +35,7 @@ namespace SpaceNavWrapper
 
 		private static void OnButton(object sender, EventArgs e)
 		{
-			Console.WriteLine("Button pressed");
+			Console.WriteLine(e);
 		}
 	}
 }

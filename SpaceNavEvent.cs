@@ -25,13 +25,18 @@ namespace SpaceNavWrapper
     }
 
 	public class ButtonEventArgs : EventArgs
-    {
-		public readonly int button;
-		public readonly bool pressed;
+	{
+		public readonly bool Pressed;
+		public readonly int Button;
         
-        public override string ToString()
+		public ButtonEventArgs(bool pressed, int button)
 		{
-			return string.Format("[ButtonEventArgs: button={0}, pressed={1}]", button, pressed);
+			Pressed = pressed;
+			Button = button;
 		}
-    }
+		public override string ToString()
+		{
+			return string.Format("[ButtonEventArgs: button={0}, pressed={1}]", Button, Pressed);
+		}
+	}
 }

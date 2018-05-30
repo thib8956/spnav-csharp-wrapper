@@ -1,0 +1,3 @@
+[submodule "spacenav-driver"]
+	path = spacenav-driver
+	url = https://git.digiserv.ovh/thibaud/spacenav-driver.git

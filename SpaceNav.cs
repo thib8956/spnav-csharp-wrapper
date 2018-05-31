@@ -110,7 +110,11 @@ namespace SpaceNavWrapper
 		#region Properties
         public double Sensitivity
         {
-            get => _sensitivity;
+            get
+            {
+                return _sensitivity;
+            }
+
             set
             {
                 _sensitivity = value;
@@ -120,26 +124,34 @@ namespace SpaceNavWrapper
 
         public int Threshold
         {
-            get => _threshold;
+            get
+            {
+                return _threshold;
+            }
+
             set
             {
                 _threshold = value;
                 spnav_deadzone(value);
             }
         }
-        
+
         public bool Nonblocking
         {
-			get => _nonblocking;
+            get
+            {
+                return _nonblocking;
+            }
+
             set
             {
-				_nonblocking = value;
-				spnav_set_nonblocking(value);
+                _nonblocking = value;
+                spnav_set_nonblocking(value);
             }
         }
-		#endregion
+        #endregion
 
-		public void Dispose()
+        public void Dispose()
 		{
 			if (!isDisposed)
 			{

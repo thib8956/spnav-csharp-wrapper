@@ -13,24 +13,63 @@ namespace SpaceNavWrapper
                 
         public MotionEventArgs(int x, int y, int z, int rx, int ry, int rz)
 		{
-			axisValues = new Dictionary<SpaceNavAxis, int>
-			{
-				[SpaceNavAxis.X] = x,
-				[SpaceNavAxis.Y] = y,
-				[SpaceNavAxis.Z] = y,
-				[SpaceNavAxis.Rx] = rx,
-				[SpaceNavAxis.Ry] = ry,
-				[SpaceNavAxis.Rz] = rz
-			};
+            axisValues = new Dictionary<SpaceNavAxis, int>();
+            axisValues[SpaceNavAxis.X] = x;
+			axisValues[SpaceNavAxis.Y] = y;
+			axisValues[SpaceNavAxis.Z] = y;
+			axisValues[SpaceNavAxis.Rx] = rx;
+			axisValues[SpaceNavAxis.Ry] = ry;
+			axisValues[SpaceNavAxis.Rz] = rz;
 		}
-        
-        public int X => axisValues[SpaceNavAxis.X];
-        public int Y => axisValues[SpaceNavAxis.Y];
-        public int Z => axisValues[SpaceNavAxis.Z];
-        public int Rx => axisValues[SpaceNavAxis.Rx];
-        public int Ry => axisValues[SpaceNavAxis.Ry];
-        public int Rz => axisValues[SpaceNavAxis.Rz];
-        
+
+        public int X
+        {
+            get
+            {
+                return axisValues[SpaceNavAxis.X];
+            }
+        }
+
+        public int Y
+        {
+            get
+            {
+                return axisValues[SpaceNavAxis.Y];
+            }
+        }
+
+        public int Z
+        {
+            get
+            {
+                return axisValues[SpaceNavAxis.Z];
+            }
+        }
+
+        public int Rx
+        {
+            get
+            {
+                return axisValues[SpaceNavAxis.Rx];
+            }
+        }
+
+        public int Ry
+        {
+            get
+            {
+                return axisValues[SpaceNavAxis.Ry];
+            }
+        }
+
+        public int Rz
+        {
+            get
+            {
+                return axisValues[SpaceNavAxis.Rz];
+            }
+        }
+
         public override string ToString()
 		{
 			return string.Format("x={0} y={1} z={2} rx={3} ry={4} rz={5}", X, Y, Z, Rx, Ry, Rz);
